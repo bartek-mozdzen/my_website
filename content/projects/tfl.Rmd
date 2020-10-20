@@ -71,10 +71,6 @@ bike <- bike0 %>%
 
 We can easily create a facet grid that plots bikes hired by month and year.
 
-```{r tfl_month_year_grid, out.width="100%"}
-knitr::include_graphics(here::here("images", "tfl_distributions_monthly.png"), error = FALSE)
-```
-
 Look at May and Jun and compare 2020 with the previous years. What's happening?
 
 - The distributions of May and June of 2020 are platykurtic, while the previous years' distributions are leptokurtic. This means that the first 2 have heavy-tails (more data in the tails), while the latter have light-tails (less data in the tails). Showing that in previous years the rental behaviour was rather predictable and often similar while May and June of this year had highly unusual behaviour with many outliers both in the low and high regions of the distribution. This is definitely a result of the COVID restrictions and their effect on people's behaviour.
@@ -124,9 +120,6 @@ bike %>%
 
 The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.
 
-```{r tfl_percent_change, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "tfl_weekly.png"), error = FALSE)
-```
 
 ```{r}
 expected_per_week <- bike %>% 

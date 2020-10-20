@@ -39,8 +39,6 @@ bike &lt;- bike0 %&gt;%
           month = lubridate::month(day, label = TRUE),
           week = isoweek(day))</code></pre>
 <p>We can easily create a facet grid that plots bikes hired by month and year.</p>
-<pre class="r"><code>knitr::include_graphics(here::here(&quot;images&quot;, &quot;tfl_distributions_monthly.png&quot;), error = FALSE)</code></pre>
-<p><img src="C:/Users/Bartek/Desktop/LBS/Data Analytics/My-Website/my_website/images/tfl_distributions_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>Look at May and Jun and compare 2020 with the previous years. What’s happening?</p>
 <ul>
 <li>The distributions of May and June of 2020 are platykurtic, while the previous years’ distributions are leptokurtic. This means that the first 2 have heavy-tails (more data in the tails), while the latter have light-tails (less data in the tails). Showing that in previous years the rental behaviour was rather predictable and often similar while May and June of this year had highly unusual behaviour with many outliers both in the low and high regions of the distribution. This is definitely a result of the COVID restrictions and their effect on people’s behaviour.</li>
@@ -80,7 +78,6 @@ bike %&gt;%
   theme_minimal()</code></pre>
 <p><img src="/projects/tfl_files/figure-html/unnamed-chunk-1-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.</p>
-<p><img src="C:/Users/Bartek/Desktop/LBS/Data Analytics/My-Website/my_website/images/tfl_weekly.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>expected_per_week &lt;- bike %&gt;% 
   filter(year&gt;=2015 &amp; year&lt;=2019) %&gt;% 
   group_by(week) %&gt;%
