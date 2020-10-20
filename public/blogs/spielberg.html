@@ -1,18 +1,40 @@
----
-categories:
-- ""
-- ""
-date: "2017-10-31T22:42:51-05:00"
-description: An analysis of the reviews of two directors
-draft: false
-image: spielberg.jpg
-keywords: ""
-slug: imdb
-title: Burton vs Spielberg
----
 
 
 
+<table>
+<tbody>
+<tr class="odd">
+<td>tegories:</td>
+</tr>
+<tr class="even">
+<td>""</td>
+</tr>
+<tr class="odd">
+<td>""</td>
+</tr>
+<tr class="even">
+<td>te: “2017-10-31T22:42:51-05:00”</td>
+</tr>
+<tr class="odd">
+<td>scription: An analysis of the reviews of two directors</td>
+</tr>
+<tr class="even">
+<td>aft: false</td>
+</tr>
+<tr class="odd">
+<td>age: spielberg.jpg</td>
+</tr>
+<tr class="even">
+<td>ywords: ""</td>
+</tr>
+<tr class="odd">
+<td>ug: spielberg</td>
+</tr>
+<tr class="even">
+<td>tle: Burton v Spielberg</td>
+</tr>
+</tbody>
+</table>
 <p>A battle of titans - Alice in Wonderland vs Catch Me If You Can (or Jaws, or Schindlers List, or Saving Private Ryan or …) you already know my preference. In this analysis we take a look at Steven Spielberg and Tim Burton reviews on IMDB and compare then using hypothesis tests. Although my other data visualization have tackled rather heavy topics this one is meant as a little fun and to be taken with a grain of salt as art is obviously a very subjective topic :) Enjoy!</p>
 <div id="imdb-ratings-differences-between-directors" class="section level1">
 <h1>IMDB ratings: Differences between directors</h1>
@@ -64,7 +86,7 @@ g1 %&gt;%
   geom_text(aes(x=upper95_ci, label = round(upper95_ci,2)), vjust=-1, size=5)+
   geom_text(aes(x=lower95_ci, label = round(lower95_ci,2)), vjust=-1, size=5)+
   NULL</code></pre>
-<p><img src="/blogs/imdb_files/figure-html/movies_graph-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/blogs/spielberg_files/figure-html/movies_graph-1.png" width="648" style="display: block; margin: auto;" /></p>
 </div>
 <div id="hypothesis-test-with-formula" class="section level2">
 <h2>Hypothesis test with formula</h2>
@@ -110,14 +132,14 @@ directors_null_dist &lt;- Burton_Spielberg %&gt;%
 # Visualising to see how many of these null permutations have a difference
 directors_null_dist %&gt;% visualize() +
   shade_p_value(obs_stat = directors_diff, direction = &quot;two-sided&quot;)</code></pre>
-<p><img src="/blogs/imdb_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/blogs/spielberg_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># Calculating the p-value for the hypothesis test
 directors_null_dist %&gt;%
   get_p_value(obs_stat = directors_diff, direction = &quot;two_sided&quot;)</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   p_value
 ##     &lt;dbl&gt;
-## 1   0.014</code></pre>
+## 1   0.008</code></pre>
 <p>From the hypothesis test, we can see that the t-stat is 3 and the p-value is 1% which is smaller than 5%, so we reject the null hypothesis and conclude that the the difference in mean IMDB ratings for Steven Spielberg and Tim Burton is statistically significant, specifically the mean rating of Steven Spielberg is higher. <strong>This is just like what we expected, as we all prefer Steven Spielberg.</strong></p>
 </div>
 </div>

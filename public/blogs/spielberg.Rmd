@@ -1,4 +1,4 @@
----
+  ---
 categories:
 - ""
 - ""
@@ -7,8 +7,8 @@ description: An analysis of the reviews of two directors
 draft: false
 image: spielberg.jpg
 keywords: ""
-slug: imdb
-title: Burton vs Spielberg
+slug: spielberg
+title: Burton v Spielberg
 ---
 
 
@@ -44,6 +44,7 @@ library(infer)
 library(openintro)
 library(tidyquant)
 ```
+
 
 A battle of titans - Alice in Wonderland vs Catch Me If You Can (or Jaws, or Schindlers List, or Saving Private Ryan or ...) you already know my preference. In this analysis we take a look at Steven Spielberg and Tim Burton reviews on IMDB and compare then using hypothesis tests. Although my other data visualization have tackled rather heavy topics this one is meant as a little fun and to be taken with a grain of salt as art is obviously a very subjective topic :) Enjoy!
 

@@ -105,16 +105,16 @@ disqusShortname = ""
 
 
     [[params.tiles.showcase]]
-      title = "Our world in data"
-      subtitle = "An analysis of socioeconomic variables around the world"
+      title = "Global Socioeconomical Analysis"
+      subtitle = "An analysis of GDP, fertility rate among othersblo"
       image = "gapminder.jpg"
       url = "blogs/gapminder"
 
     [[params.tiles.showcase]]
       title = "Burton vs Spielberg"
-      subtitle = "An analysis of the reviews of two directors"
+      subtitle = "An analysis of the reviews of two prolific directors"
       image = "spielberg.jpg"
-      url = "blogs/imdb"
+      url = "blogs/IMDB"
 
  #  [[params.tiles.showcase]]
   #title = "Consequat"

@@ -8,6 +8,15 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 31 Oct 2017 22:27:21 -0500</lastBuildDate><atom:link href="/blogs/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Burton vs Spielberg</title>
+      <link>/blogs/imdb/</link>
+      <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
+      
+      <guid>/blogs/imdb/</guid>
+      <description>A battle of titans - Alice in Wonderland vs Catch Me If You Can (or Jaws, or Schindlers List, or Saving Private Ryan or …) you already know my preference. In this analysis we take a look at Steven Spielberg and Tim Burton reviews on IMDB and compare then using hypothesis tests. Although my other data visualization have tackled rather heavy topics this one is meant as a little fun and to be taken with a grain of salt as art is obviously a very subjective topic :) Enjoy!</description>
+    </item>
+    
+    <item>
       <title>Climate Change</title>
       <link>/blogs/climate/</link>
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
