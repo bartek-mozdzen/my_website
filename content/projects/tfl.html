@@ -1,0 +1,130 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:42:51-05:00"
+description: An analysis of London bike rentals during COVID
+draft: false
+image: tfl.jpg
+keywords: ""
+slug: tfl
+title: TfL
+---
+
+
+
+<div id="challenge-2-excess-rentals-in-tfl-bike-sharing" class="section level1">
+<h1>Challenge 2: Excess rentals in TfL bike sharing</h1>
+<p>Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following</p>
+<pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
+
+# Download TFL data to temporary file
+httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20201020%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20201020T170459Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=150892cd8331c0a4251e6099fcd95fa534723b622ec105a71b73c592a6293a2b&amp;X-Amz-SignedHeaders=host]
+##   Date: 2020-10-20 17:07
+##   Status: 200
+##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+##   Size: 165 kB
+## &lt;ON DISK&gt;  C:\Users\Bartek\AppData\Local\Temp\Rtmpwx0OEy\file72586c723a15.xlsx</code></pre>
+<pre class="r"><code># Use read_excel to read it as dataframe
+bike0 &lt;- read_excel(bike.temp,
+                   sheet = &quot;Data&quot;,
+                   range = cell_cols(&quot;A:B&quot;))
+
+# change dates to get year, month, and week
+bike &lt;- bike0 %&gt;% 
+  clean_names() %&gt;% 
+  rename (bikes_hired = number_of_bicycle_hires) %&gt;% 
+  mutate (year = year(day),
+          month = lubridate::month(day, label = TRUE),
+          week = isoweek(day))</code></pre>
+<p>We can easily create a facet grid that plots bikes hired by month and year.</p>
+<pre class="r"><code>knitr::include_graphics(here::here(&quot;images&quot;, &quot;tfl_distributions_monthly.png&quot;), error = FALSE)</code></pre>
+<p><img src="C:/Users/Bartek/Desktop/LBS/Data Analytics/My-Website/my_website/images/tfl_distributions_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Look at May and Jun and compare 2020 with the previous years. What’s happening?</p>
+<ul>
+<li>The distributions of May and June of 2020 are platykurtic, while the previous years’ distributions are leptokurtic. This means that the first 2 have heavy-tails (more data in the tails), while the latter have light-tails (less data in the tails). Showing that in previous years the rental behaviour was rather predictable and often similar while May and June of this year had highly unusual behaviour with many outliers both in the low and high regions of the distribution. This is definitely a result of the COVID restrictions and their effect on people’s behaviour.</li>
+</ul>
+<div id="reproducing-the-two-graphs-showing-tfl-bike-rentals" class="section level2">
+<h2>Reproducing the two graphs showing TfL bike rentals</h2>
+<pre class="r"><code>knitr::include_graphics(here::here(&quot;images&quot;, &quot;tfl_monthly.png&quot;), error = FALSE)</code></pre>
+<p><img src="C:/Users/Bartek/Desktop/LBS/Data Analytics/My-Website/my_website/images/tfl_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>expected_per_month &lt;- bike %&gt;% 
+  filter(year&gt;=2015 &amp; year&lt;=2019) %&gt;% 
+  group_by(month) %&gt;%
+  summarize(expected_per_month = mean(bikes_hired))  
+
+bike %&gt;%
+  filter(year&gt;=2015) %&gt;%
+  group_by(year, month) %&gt;%
+  summarize(mean_per_month = mean(bikes_hired)) %&gt;% 
+  left_join(expected_per_month) %&gt;% 
+  ggplot(aes(x = month, 
+             group = 1)) +
+  geom_line(aes(y = mean_per_month)) +
+  geom_line(aes(y = expected_per_month), 
+            colour = &quot;blue&quot;,
+            size = 0.7) +
+  geom_ribbon(aes(ymin = expected_per_month,
+                  ymax = pmax(mean_per_month, expected_per_month)),
+              fill = &quot;#9EE09C&quot;, alpha = 0.5) +
+    geom_ribbon(aes(ymin = pmin(mean_per_month, expected_per_month),
+                  ymax = expected_per_month),
+              fill = &quot;#FC787E&quot;, alpha = 0.5) +
+  facet_wrap(~ year) +
+  labs(title = &quot;Monthly changes in TfL bike rentals&quot;, 
+       subtitle = &quot;Change from monthly average shown in blue \n and calculated between 2015-2019&quot;,
+       x = &quot;&quot;,
+       y = &quot;Bike rentals&quot;,
+       caption = &quot;Source: TfL, London Data Store&quot;) + 
+  theme_minimal()</code></pre>
+<p><img src="/projects/tfl_files/figure-html/unnamed-chunk-1-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.</p>
+<p><img src="C:/Users/Bartek/Desktop/LBS/Data Analytics/My-Website/my_website/images/tfl_weekly.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>expected_per_week &lt;- bike %&gt;% 
+  filter(year&gt;=2015 &amp; year&lt;=2019) %&gt;% 
+  group_by(week) %&gt;%
+  summarize(expected_per_week = mean(bikes_hired))
+
+bike2 &lt;- bike %&gt;%
+  filter(year&gt;=2015) %&gt;%
+  group_by(year, week) %&gt;%
+  mutate(mean_per_week = mean(bikes_hired)) %&gt;% 
+  left_join(expected_per_week) %&gt;% 
+  mutate(pos_neg = case_when(
+           mean_per_week/expected_per_week - 1 &gt;= 0  ~ &quot;positive&quot;,
+           mean_per_week/expected_per_week - 1 &lt; 0  ~ &quot;negative&quot;))
+
+
+bike2 %&gt;% 
+  ggplot(aes(x = week,
+             y = mean_per_week/expected_per_week - 1,
+             group = 1)) +
+  geom_rect(aes(xmin = 13, xmax = 26, ymin = -Inf, ymax = Inf), alpha = 0.1, fill = &quot;#EDEDED&quot;) +
+  geom_rect(aes(xmin = 39, xmax = 53, ymin = -Inf, ymax = Inf), alpha = 0.1, fill = &quot;#EDEDED&quot;) +
+  geom_line() +
+  geom_ribbon(aes(ymin = 0,
+                  ymax = pmax(mean_per_week/expected_per_week - 1, 0)),
+              fill = &quot;#9EE09C&quot;, alpha = 0.5) +
+    geom_ribbon(aes(ymin = pmin(mean_per_week/expected_per_week - 1, 0),
+                  ymax = 0),
+              fill = &quot;#FC787E&quot;, alpha = 0.5) +
+  facet_wrap(~ year) +
+  labs(title = &quot;Weekly changes in TfL bike rentals&quot;,
+       subtitle = &quot;% change from weekly averages \n calculated between 2015-2019&quot;,
+       y = &quot;&quot;,
+       caption = &quot;Source: TfL, London Data Store&quot;) +
+  theme_minimal() +
+  scale_y_continuous(breaks = c(-0.6, -0.3, 0, 0.3, 0.6),labels = scales::percent) +
+  scale_x_continuous(breaks = c(13,26,39,53)) +
+  geom_rug(sides = &quot;b&quot;, colour = case_when(
+                                  bike2$pos_neg == &quot;negative&quot; ~ &quot;#FC787E&quot;,
+                                  bike2$pos_neg == &quot;positive&quot; ~ &quot;#9EE09C&quot;)) </code></pre>
+<p><img src="/projects/tfl_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>For both of these graphs, you have to calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. Think of the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>.</p>
+<p>Should you use the mean or the median to calculate your expected rentals? Why?</p>
+<ul>
+<li>In order to calculate the expected rentals we should use the mean. The expected value (here: expected rentals) of a random variable is the average value (mean) of the variable. Due to the law of large numbers, the mean of the variable should converge to its expected value as the number of repetitions approaches infinity.</li>
+</ul>
+</div>
+</div>
