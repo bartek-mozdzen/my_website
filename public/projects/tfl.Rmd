@@ -45,7 +45,7 @@ library(infer)
 
 Exploring TfL bike sharing
 
-![Santander bikes](C:\Users\Bartek\Desktop\LBS\Data Analytics\My-Website\my_website\static\img\blogs)
+
 
 Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following
 
