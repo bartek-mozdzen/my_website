@@ -8,15 +8,6 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 31 Oct 2017 22:42:51 -0500</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Burton v Spielberg</title>
-      <link>/blogs/imdb/</link>
-      <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
-      
-      <guid>/blogs/imdb/</guid>
-      <description>IMDB ratings: Differences between directorsRecall the IMBD ratings data in homework1. We would like to explore whether the mean IMDB rating for Steven Spielberg and Tim Burton are the same or not. Below is the calculated the confidence intervals for the mean ratings of these two directors and as you can see they overlap. We will reproduce this graph and run a hpothesis test using both the t.test command and the infer package to simulate from a null distribution, where we assume zero difference between the two.</description>
-    </item>
-    
-    <item>
       <title>Climate Change</title>
       <link>/blogs/climate/</link>
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
@@ -32,7 +23,8 @@ We wanted to study climate change and used data on the Combined Land-Surface Air
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
       
       <guid>/blogs/gapminder/</guid>
-      <description>Gapminder revisited# load gapminder HIV datahiv &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;,&amp;quot;adults_with_hiv_percent_age_15_49.csv&amp;quot;))life_expectancy &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;,&amp;quot;life_expectancy_years.csv&amp;quot;))# get World bank data using wbstatsindicators &amp;lt;- c(&amp;quot;SP.DYN.TFRT.IN&amp;quot;,&amp;quot;SE.PRM.NENR&amp;quot;, &amp;quot;SH.DYN.MORT&amp;quot;, &amp;quot;NY.GDP.PCAP.KD&amp;quot;)library(wbstats)worldbank_data &amp;lt;- wb_data(country=&amp;quot;countries_only&amp;quot;, #countries only- no aggregates like Latin America, Europe, etc.indicator = indicators, start_date = 1960, end_date = 2016)# get a dataframe of information regarding countries, indicators, sources, regions, indicator topics, lending types, income levels, from the World Bank API countries &amp;lt;- wbstats::wb_cachelist$countriesMerging data framesWhen looking at the HIV, life expectancy, worldbank data and countries data frames, we saw that worldbank data is tidy, therefore we applied pivot_longer to both of the HIV prevalence and life expectancy data frames so that they can be compatible with the worldbank data frame.</description>
+      <description>The following analysis focuses on key socioeconomic factors such as fertility rate, GDP per capita and life expectancy to observe a cross section of changes that our society has gone through across the globe.
+Gapminder Dataset# load gapminder HIV datahiv &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;,&amp;quot;adults_with_hiv_percent_age_15_49.csv&amp;quot;))life_expectancy &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;,&amp;quot;life_expectancy_years.csv&amp;quot;))# get World bank data using wbstatsindicators &amp;lt;- c(&amp;quot;SP.DYN.TFRT.IN&amp;quot;,&amp;quot;SE.PRM.NENR&amp;quot;, &amp;quot;SH.DYN.MORT&amp;quot;, &amp;quot;NY.GDP.PCAP.KD&amp;quot;)library(wbstats)worldbank_data &amp;lt;- wb_data(country=&amp;quot;countries_only&amp;quot;, #countries only- no aggregates like Latin America, Europe, etc.</description>
     </item>
     
     <item>
@@ -41,9 +33,8 @@ We wanted to study climate change and used data on the Combined Land-Surface Air
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
       
       <guid>/blogs/tfl/</guid>
-      <description>Exploring TfL bike sharing
-Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following
-url &amp;lt;- &amp;quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&amp;quot;# Download TFL data to temporary filehttr::GET(url, write_disk(bike.temp &amp;lt;- tempfile(fileext = &amp;quot;.xlsx&amp;quot;)))## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20201020%2Feu-west-1%2Fs3%2Faws4_request&amp;amp;X-Amz-Date=20201020T170459Z&amp;amp;X-Amz-Expires=300&amp;amp;X-Amz-Signature=150892cd8331c0a4251e6099fcd95fa534723b622ec105a71b73c592a6293a2b&amp;amp;X-Amz-SignedHeaders=host]## Date: 2020-10-20 17:07## Status: 200## Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet## Size: 165 kB## &amp;lt;ON DISK&amp;gt; C:\Users\Bartek\AppData\Local\Temp\Rtmpwx0OEy\file72586c723a15.xlsx# Use read_excel to read it as dataframebike0 &amp;lt;- read_excel(bike.</description>
+      <description>COVID, the unprecedented lockdown and the sociological conundrum that followed have surely shaped our daily lives for the foreseeable future. These make even as trivial topics as bike rentals ripe for analysis. Below I will try to walk you through how I map the impact that COVID has had on the popular Santander bicyles available on every street corner in London.
+First I import the latest data about daily cycle hires from TfL:</description>
     </item>
     
     <item>

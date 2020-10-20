@@ -42,7 +42,9 @@ library(vroom)
 library(infer)
 ```
 
-# Gapminder revisited
+The following analysis focuses on key socioeconomic factors such as fertility rate, GDP per capita and life expectancy to observe a cross section of changes that our society has gone through across the globe.
+
+# Gapminder Dataset
 
 ```{r, get_data, cache=TRUE}
 
@@ -68,12 +70,14 @@ countries <-  wbstats::wb_cachelist$countries
 
 ## Merging data frames
 
-**When looking at the HIV, life expectancy, worldbank data and countries data frames, we saw that worldbank data is tidy, therefore we applied pivot_longer to both of the HIV prevalence and life expectancy data frames so that they can be compatible with the worldbank data frame.**
-**Furthermore, looking at the date ranges in all the data frames:**
+When looking at the HIV, life expectancy, worldbank data and countries data frames, we saw that worldbank data is tidy, therefore we applied pivot_longer to both of the HIV prevalence and life expectancy data frames so that they can be compatible with the worldbank data frame.**
+**Furthermore, looking at the date ranges in all the data frames:
+
  - hiv -> 1979 to 2011
  - life_expectancy -> 1800 to 2064
  -  worldbank_data -> 1960 to 2016
-**We decided to attach HIV and life expectancy to worldbank_data using the left join function in order to preserve the optimal date range.**
+
+We decided to attach HIV and life expectancy to worldbank_data using the left join function in order to preserve the optimal date range.
 
 ```{r}
 life_long <- life_expectancy %>% 
@@ -110,7 +114,7 @@ worldbank_merge2 <- worldbank_merge %>%
 
 ## Looking at the relationship between HIV prevalence and life expectancy
 
-**The graph below illustrates that particularly in the Middle East & North Africa, Latin America & Caribbean, Sub-Saharan Africa there is a clear relationship showing that with higher levels of HIV prevalence, life expectancy declines, this can be expected as, particularly in the past, the disease would virus was life threatening. However, East Asia & Pacific, and Europe & Central Asia show some ambiguous results. Perhaps showing the relationship between HIV prevalence and life expectancy is picking up the indirect effects of other factors such as poor health infrastructure or lower sanitary standards.**
+The graph below illustrates that particularly in the Middle East & North Africa, Latin America & Caribbean, Sub-Saharan Africa there is a clear relationship showing that with higher levels of HIV prevalence, life expectancy declines, this can be expected as, particularly in the past, the disease would virus was life threatening. However, East Asia & Pacific, and Europe & Central Asia show some ambiguous results. Perhaps showing the relationship between HIV prevalence and life expectancy is picking up the indirect effects of other factors such as poor health infrastructure or lower sanitary standards.
 
 ```{r}
 
@@ -131,7 +135,7 @@ ggplot(mapping = aes(x=HIV, y=life_expectancy)) +
 
 ## Examining the effects of GDP per capita on fertility rates
 
-**Higher levels of wealth, here measured by GDP per capita, are negatively correlated with fertility rates. This relationship likely comes about as a result of better health care, better education and higher economic participation of women that often coincide with GDP growth. **
+Higher levels of wealth, here measured by GDP per capita, are negatively correlated with fertility rates. This relationship likely comes about as a result of better health care, better education and higher economic participation of women that often coincide with GDP growth.
 
 ```{r}
 
@@ -153,7 +157,7 @@ ggplot(mapping = aes(x=NY.GDP.PCAP.KD, y=SP.DYN.TFRT.IN)) +
 
 ## Missing HIV data 
 
-**The region with the most missing observations is Europe & Central Asia with 996 NA values in this data frame, however since there are varying amounts of countries between the regions it is relevant to look at these in terms of a proportion to the total amount of potential observations. When looking at it from that perspective the East Asia & Pacific region misses the highest proportion with 74.1% of potential observations in the dataset registering NA.**
+The region with the most missing observations is Europe & Central Asia with 996 NA values in this data frame, however since there are varying amounts of countries between the regions it is relevant to look at these in terms of a proportion to the total amount of potential observations. When looking at it from that perspective the East Asia & Pacific region misses the highest proportion with 74.1% of potential observations in the dataset registering NA.
 
 
 ```{r}
@@ -193,7 +197,7 @@ ggplot(hiv_missing,aes(x=reorder(region,proportion),y=proportion)) +
 
 ## Top 5 countries with the greatest/lowest decrease in mortality rate per region
 
-**When looking at the countries with the highest and lowest decreases in mortality, South Korea clearly comes out on time with a decrease of -96.97%, while globally Lesotho has had the slowest progress with their mortality rate dropping by only 51.525% over this time period. However, the conclusions you can draw from this analysis are pretty limited since some well developed countries such as Netherlands or the UK have experienced the slowest progress this is due to the fact that they were already well developed back in 1960. Another limitation of this analysis is the missing values of some countries that do not allow a comparison in the time period examined.**
+When looking at the countries with the highest and lowest decreases in mortality, South Korea clearly comes out on time with a decrease of -96.97%, while globally Lesotho has had the slowest progress with their mortality rate dropping by only 51.525% over this time period. However, the conclusions you can draw from this analysis are pretty limited since some well developed countries such as Netherlands or the UK have experienced the slowest progress this is due to the fact that they were already well developed back in 1960. Another limitation of this analysis is the missing values of some countries that do not allow a comparison in the time period examined.
 
 ```{r}
 
@@ -244,7 +248,7 @@ ggplot(bottom_five,aes(x=reorder(country,delta),y=abs(delta))) +
 
 ## Is there a relationship between primary school enrollment and fertility rate?
 
-**There is a clear negative relationship between primary school enrollment and fertility rates. The higher proportion of the country that is able to obtain primary education the lower the fertility rate measures. Some may argue this illustrates a similar relationship as the previous relationship, however the correlation between education and fertility is even stronger, which underlines the role of education outcomes in this relationship. And the role of education has on health outcomes and on economic outcomes and independence of women.**
+There is a clear negative relationship between primary school enrollment and fertility rates. The higher proportion of the country that is able to obtain primary education the lower the fertility rate measures. Some may argue this illustrates a similar relationship as the previous relationship, however the correlation between education and fertility is even stronger, which underlines the role of education outcomes in this relationship. And the role of education has on health outcomes and on economic outcomes and independence of women.
 
 ```{r}
 

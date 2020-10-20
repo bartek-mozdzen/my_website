@@ -1,4 +1,4 @@
----
+  ---
 categories:
 - ""
 - ""
@@ -45,13 +45,10 @@ library(tidyquant)
 ```
 
 
+A battle of titans - Alice in Wonderland vs Catch Me If You Can (or Jaws, or Schindlers List, or Saving Private Ryan or ...) you already know my preference. In this analysis we take a look at Steven Spielberg and Tim Burton reviews on IMDB and compare then using hypothesis tests. Although my other data visualization have tackled rather heavy topics this one is meant as a little fun and to be taken with a grain of salt as art is obviously a very subjective topic :) Enjoy!
+
 # IMDB ratings: Differences between directors
 
-Recall the IMBD ratings data in homework1. We would like to explore whether the mean IMDB rating for Steven Spielberg and Tim Burton are the same or not. Below is the calculated the confidence intervals for the mean ratings of these two directors and as you can see they overlap. We will reproduce this graph and run a hpothesis test using both the `t.test` command and the `infer` package to simulate from a null distribution, where we assume zero difference between the two.
-
-```{r directors, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "directors.png"), error = FALSE)
-```
 
 ## Load the data and examine its structure
 
@@ -65,7 +62,7 @@ Burton_Spielberg <- movies %>%
 
 ```
 
-## Reproducing the graph
+## Establishing the interval
 
 ```{r movies_graph}
 
@@ -141,4 +138,4 @@ directors_null_dist %>%
   get_p_value(obs_stat = directors_diff, direction = "two_sided")
 ```
 
-**From the hypothesis test, we can see that the t-stat is 3 and the p-value is 1% which is smaller than 5%, so we reject the null hypothesis and conclude that the the difference in mean IMDB ratings for Steven Spielberg and Tim Burton is statistically significant, specifically the mean rating of Steven Spielberg is higher. This is just like what we expected, as we all prefer Steven Spielberg.**
+From the hypothesis test, we can see that the t-stat is 3 and the p-value is 1% which is smaller than 5%, so we reject the null hypothesis and conclude that the the difference in mean IMDB ratings for Steven Spielberg and Tim Burton is statistically significant, specifically the mean rating of Steven Spielberg is higher. **This is just like what we expected, as we all prefer Steven Spielberg.**

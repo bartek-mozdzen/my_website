@@ -13,18 +13,18 @@ title: TfL
 
 
 
-<p>Exploring TfL bike sharing</p>
-<p>Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following</p>
+<p>COVID, the unprecedented lockdown and the sociological conundrum that followed have surely shaped our daily lives for the foreseeable future. These make even as trivial topics as bike rentals ripe for analysis. Below I will try to walk you through how I map the impact that COVID has had on the popular Santander bicyles available on every street corner in London.</p>
+<p>First I import the latest data about daily cycle hires from TfL:</p>
 <pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
 
 # Download TFL data to temporary file
 httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
-<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20201020%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20201020T170459Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=150892cd8331c0a4251e6099fcd95fa534723b622ec105a71b73c592a6293a2b&amp;X-Amz-SignedHeaders=host]
-##   Date: 2020-10-20 17:07
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20201020%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20201020T213428Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=b8ec178b72cc774e5d623a616635055139eae3fc8364bb2440927ca5011543e8&amp;X-Amz-SignedHeaders=host]
+##   Date: 2020-10-20 21:34
 ##   Status: 200
 ##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 ##   Size: 165 kB
-## &lt;ON DISK&gt;  C:\Users\Bartek\AppData\Local\Temp\Rtmpwx0OEy\file72586c723a15.xlsx</code></pre>
+## &lt;ON DISK&gt;  C:\Users\Bartek\AppData\Local\Temp\Rtmp8IZ5wV\file57bc35747482.xlsx</code></pre>
 <pre class="r"><code># Use read_excel to read it as dataframe
 bike0 &lt;- read_excel(bike.temp,
                    sheet = &quot;Data&quot;,
@@ -37,13 +37,8 @@ bike &lt;- bike0 %&gt;%
   mutate (year = year(day),
           month = lubridate::month(day, label = TRUE),
           week = isoweek(day))</code></pre>
-<p>We can easily create a facet grid that plots bikes hired by month and year.</p>
-<p>Look at May and Jun and compare 2020 with the previous years. What’s happening?</p>
-<ul>
-<li>The distributions of May and June of 2020 are platykurtic, while the previous years’ distributions are leptokurtic. This means that the first 2 have heavy-tails (more data in the tails), while the latter have light-tails (less data in the tails). Showing that in previous years the rental behaviour was rather predictable and often similar while May and June of this year had highly unusual behaviour with many outliers both in the low and high regions of the distribution. This is definitely a result of the COVID restrictions and their effect on people’s behaviour.</li>
-</ul>
-<div id="reproducing-the-two-graphs-showing-tfl-bike-rentals" class="section level2">
-<h2>Reproducing the two graphs showing TfL bike rentals</h2>
+<div id="showing-tfl-bike-rental-changes-by-month-in-each-year-vs-a-running-average" class="section level2">
+<h2>Showing TfL bike rental changes by month in each year vs a running average</h2>
 <pre class="r"><code>expected_per_month &lt;- bike %&gt;% 
   filter(year&gt;=2015 &amp; year&lt;=2019) %&gt;% 
   group_by(month) %&gt;%
@@ -73,8 +68,8 @@ bike %&gt;%
        y = &quot;Bike rentals&quot;,
        caption = &quot;Source: TfL, London Data Store&quot;) + 
   theme_minimal()</code></pre>
-<p><img src="/projects/tfl_files/figure-html/unnamed-chunk-1-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.</p>
+<p><img src="/blogs/tfl_files/figure-html/unnamed-chunk-1-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>There are some interesting insight to draw from this graph, like the consistently lower usage of bikes across of 2015 or the steady adoption of bikes in the following years. But what is the most interesting is the wild shifts in the number of bikes in 2020, with a massive dip across February, March and April during the most intense lockdown and a huge rebound in May, June, July and August where the bikes rentals leaped back over the average. <strong>Like a cork on a plastic bottle being squeezed, after the toils of isolating people’s interest in getting outdoors exploded as soon as it was legal again to do so. </strong></p>
 <pre class="r"><code>expected_per_week &lt;- bike %&gt;% 
   filter(year&gt;=2015 &amp; year&lt;=2019) %&gt;% 
   group_by(week) %&gt;%
@@ -114,10 +109,7 @@ bike2 %&gt;%
   geom_rug(sides = &quot;b&quot;, colour = case_when(
                                   bike2$pos_neg == &quot;negative&quot; ~ &quot;#FC787E&quot;,
                                   bike2$pos_neg == &quot;positive&quot; ~ &quot;#9EE09C&quot;)) </code></pre>
-<p><img src="/projects/tfl_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
-<p>For both of these graphs, you have to calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. Think of the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>.</p>
-<p>Should you use the mean or the median to calculate your expected rentals? Why?</p>
-<ul>
-<li>In order to calculate the expected rentals we should use the mean. The expected value (here: expected rentals) of a random variable is the average value (mean) of the variable. Due to the law of large numbers, the mean of the variable should converge to its expected value as the number of repetitions approaches infinity.</li>
-</ul>
+<p><img src="/blogs/tfl_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>The weekly trends show the same underlying patterns, with more precision!</p>
+<p>Using this data to map other events beyond the impact of COVID such as the impact of weather or London wide events (such as a tube strike) might be an interesting piece of analysis to improve the adoption of cycling in the city!</p>
 </div>

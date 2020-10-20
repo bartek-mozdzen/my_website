@@ -43,11 +43,10 @@ library(infer)
 ```
 
 
-Exploring TfL bike sharing
+COVID, the unprecedented lockdown and the sociological conundrum that followed have surely shaped our daily lives for the foreseeable future. These make even as trivial topics as bike rentals ripe for analysis. Below I will try to walk you through how I map the impact that COVID has had on the popular Santander bicyles available on every street corner in London.
 
 
-
-Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following
+First I import the latest data about daily cycle hires from TfL:
 
 ```{r, get_tfl_data, cache=TRUE}
 url <- "https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx"
@@ -69,15 +68,7 @@ bike <- bike0 %>%
           week = isoweek(day))
 ```
 
-
-
-We can easily create a facet grid that plots bikes hired by month and year.
-
-Look at May and Jun and compare 2020 with the previous years. What's happening?
-
-- The distributions of May and June of 2020 are platykurtic, while the previous years' distributions are leptokurtic. This means that the first 2 have heavy-tails (more data in the tails), while the latter have light-tails (less data in the tails). Showing that in previous years the rental behaviour was rather predictable and often similar while May and June of this year had highly unusual behaviour with many outliers both in the low and high regions of the distribution. This is definitely a result of the COVID restrictions and their effect on people's behaviour.
-
-## Reproducing the two graphs showing TfL bike rentals
+## Showing TfL bike rental changes by month in each year vs a running average
 
 
 ```{r fig.width = 16, fig.height = 9, out.width="100%"}
@@ -118,7 +109,7 @@ bike %>%
 
 
 
-The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.
+There are some interesting insight to draw from this graph, like the consistently lower usage of bikes across of 2015 or the steady adoption of bikes in the following years. But what is the most interesting is the wild shifts in the number of bikes in 2020, with a massive dip across February, March and April during the most intense lockdown and a huge rebound in May, June, July and August where the bikes rentals leaped back over the average. **Like a cork on a plastic bottle being squeezed, after the toils of isolating people's interest in getting outdoors exploded as soon as it was legal again to do so. **
 
 
 ```{r}
@@ -164,8 +155,6 @@ bike2 %>%
 
 ```
 
-For both of these graphs, you have to calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. Think of the calculation `excess_rentals = actual_rentals - expected_rentals`. 
+The weekly trends show the same underlying patterns, with more precision! 
 
-Should you use the mean or the median to calculate your expected rentals? Why?
-
-- In order to calculate the expected rentals we should use the mean. The expected value (here: expected rentals) of a random variable is the average value (mean) of the variable. Due to the law of large numbers, the mean of the variable should converge to its expected value as the number of repetitions approaches infinity.
+Using this data to map other events beyond the impact of COVID such as the impact of weather or London wide events (such as a tube strike) might be an interesting piece of analysis to improve the adoption of cycling in the city!
