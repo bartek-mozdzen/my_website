@@ -104,16 +104,16 @@ disqusShortname = ""
       url = "projects/climate"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
-      image = "pic03.jpg"
-      url = "blogs/magna"
+      title = "Our world in data"
+      subtitle = "An analysis of socioeconomic variables around the world"
+      image = "gapminder.jpg"
+      url = "projects/gapminder"
 
     [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
-      image = "pic04.jpg"
-      url = "blogs/ipsum"
+      title = "Burton vs Spielberg"
+      subtitle = "An analysis of the reviews of two directors"
+      image = "spielberg.jpg"
+      url = "projects/IMDB"
 
     [[params.tiles.showcase]]
       title = "Consequat"

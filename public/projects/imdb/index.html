@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="MFA Student at London Business School">
+	<meta name="author" content="Bartek Mozdzen">
+	<meta name="generator" content="Hugo 0.75.1" />
+	<title>Burton v Spielberg &middot; Portfolio Website for Bartek Mozdzen</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Bartek Mozdzen</strong> <span>Portfolio Website</span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs" class="button special fit">My projects</a></li>
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Burton v Spielberg</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/projects/spielberg.jpg" alt="" /></span>
+                            
+                            
+
+
+<div id="imdb-ratings-differences-between-directors" class="section level1">
+<h1>IMDB ratings: Differences between directors</h1>
+<p>Recall the IMBD ratings data in homework1. We would like to explore whether the mean IMDB rating for Steven Spielberg and Tim Burton are the same or not. Below is the calculated the confidence intervals for the mean ratings of these two directors and as you can see they overlap. We will reproduce this graph and run a hpothesis test using both the <code>t.test</code> command and the <code>infer</code> package to simulate from a null distribution, where we assume zero difference between the two.</p>
+<p><img src="C:/Users/Bartek/Desktop/LBS/Data Analytics/My-Website/my_website/images/directors.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="load-the-data-and-examine-its-structure" class="section level2">
+<h2>Load the data and examine its structure</h2>
+<pre class="r"><code>movies &lt;- read_csv(here::here(&quot;data&quot;, &quot;movies.csv&quot;))
+glimpse(movies)</code></pre>
+<pre><code>## Rows: 2,961
+## Columns: 11
+## $ title               &lt;chr&gt; &quot;Avatar&quot;, &quot;Titanic&quot;, &quot;Jurassic World&quot;, &quot;The Ave...
+## $ genre               &lt;chr&gt; &quot;Action&quot;, &quot;Drama&quot;, &quot;Action&quot;, &quot;Action&quot;, &quot;Action&quot;...
+## $ director            &lt;chr&gt; &quot;James Cameron&quot;, &quot;James Cameron&quot;, &quot;Colin Trevor...
+## $ year                &lt;dbl&gt; 2009, 1997, 2015, 2012, 2008, 1999, 1977, 2015,...
+## $ duration            &lt;dbl&gt; 178, 194, 124, 173, 152, 136, 125, 141, 164, 93...
+## $ gross               &lt;dbl&gt; 7.61e+08, 6.59e+08, 6.52e+08, 6.23e+08, 5.33e+0...
+## $ budget              &lt;dbl&gt; 2.37e+08, 2.00e+08, 1.50e+08, 2.20e+08, 1.85e+0...
+## $ cast_facebook_likes &lt;dbl&gt; 4834, 45223, 8458, 87697, 57802, 37723, 13485, ...
+## $ votes               &lt;dbl&gt; 886204, 793059, 418214, 995415, 1676169, 534658...
+## $ reviews             &lt;dbl&gt; 3777, 2843, 1934, 2425, 5312, 3917, 1752, 1752,...
+## $ rating              &lt;dbl&gt; 7.9, 7.7, 7.0, 8.1, 9.0, 6.5, 8.7, 7.5, 8.5, 7....</code></pre>
+<pre class="r"><code># produce the data we will use today
+Burton_Spielberg &lt;- movies %&gt;% 
+  filter(director %in% c(&quot;Steven Spielberg&quot;, &quot;Tim Burton&quot;))</code></pre>
+</div>
+<div id="reproducing-the-graph" class="section level2">
+<h2>Reproducing the graph</h2>
+<pre class="r"><code>g1 &lt;- Burton_Spielberg %&gt;% 
+  group_by(director) %&gt;% 
+  summarize(n = n(), 
+            mean_rating = mean(rating, na.rm = TRUE), 
+            SD_directors = sd(rating, na.rm = TRUE),
+            SE_directors = SD_directors/sqrt(n),
+            t_critical = qt(0.975, n-1),
+            lower95_ci = mean_rating - t_critical*SE_directors,
+            upper95_ci = mean_rating + t_critical*SE_directors)
+
+g1 %&gt;% 
+  ggplot(mapping = aes(x = mean_rating, y= reorder(director, mean_rating)))+
+  geom_point(aes(color = as.factor(director)), show.legend = FALSE, size = 5) +
+  geom_errorbar(aes(xmin = lower95_ci, xmax = upper95_ci, color = as.factor(director)), width = 0.1, show.legend = FALSE, size = 1.8) +
+  geom_rect(aes(xmin = max(lower95_ci), xmax = min(upper95_ci), ymin = -Inf, ymax = Inf), alpha = 0.1, fill = &quot;black&quot;) +
+  theme_minimal()+
+  labs(x = &quot;Mean IMDB Rating&quot;,
+       y = &quot;&quot;,
+       title = &quot;Do Spielberg and Burton have the same mean IMDB rating?&quot;,
+       subtitle = &quot;95% confidence intervals overlap&quot;
+       )+
+  geom_text(aes(label = round(mean_rating,2)), vjust=-1, size=6)+
+  geom_text(aes(x=upper95_ci, label = round(upper95_ci,2)), vjust=-1, size=5)+
+  geom_text(aes(x=lower95_ci, label = round(lower95_ci,2)), vjust=-1, size=5)+
+  NULL</code></pre>
+<p><img src="/projects/imdb_files/figure-html/movies_graph-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="hypothesis-test-with-formula" class="section level2">
+<h2>Hypothesis test with formula</h2>
+<ul>
+<li>Null hypotheses: The mean IMDB rating for Steven Spielberg and Tim Burton are the same</li>
+<li>Alternative hypotheses: The mean IMDB rating for Steven Spielberg and Tim Burton are different</li>
+<li>p-value: if p-value is lower than 5%, then reject H0 and think the mean IMDB rating for Steven Spielberg and Tim Burton are different</li>
+</ul>
+<pre class="r"><code>t.test(rating ~ director, data = Burton_Spielberg)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  rating by director
+## t = 3, df = 31, p-value = 0.01
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  0.16 1.13
+## sample estimates:
+## mean in group Steven Spielberg       mean in group Tim Burton 
+##                           7.57                           6.93</code></pre>
+</div>
+<div id="hypothesis-test-with-infer" class="section level2">
+<h2>Hypothesis test with <code>infer</code></h2>
+<ul>
+<li>Null hypotheses: The mean IMDB rating for Steven Spielberg and Tim Burton are the same</li>
+<li>Alternative hypotheses: The mean IMDB rating for Steven Spielberg and Tim Burton are different</li>
+<li>p-value: if p-value is lower than 5%, then reject H0 and think the mean IMDB rating for Steven Spielberg and Tim Burton are different</li>
+</ul>
+<pre class="r"><code># initialize the test, which we save as `directors_diff`
+directors_diff &lt;- Burton_Spielberg %&gt;%
+    specify(rating ~ director) %&gt;%
+  
+    # the statistic we are searching for is the difference in means, with the order being &quot;Steven Spielberg&quot;, &quot;Tim Burton&quot;
+    calculate(stat = &quot;diff in means&quot;, order = c(&quot;Steven Spielberg&quot;, &quot;Tim Burton&quot;))
+
+# simulate the test on the null distribution, which we save as null
+directors_null_dist &lt;- Burton_Spielberg %&gt;%
+    specify(rating ~ director) %&gt;%
+    hypothesize(null = &quot;independence&quot;) %&gt;%
+    generate(reps = 1000, type = &quot;permute&quot;) %&gt;%
+    calculate(stat = &quot;diff in means&quot;, order = c(&quot;Steven Spielberg&quot;, &quot;Tim Burton&quot;))
+
+# Visualising to see how many of these null permutations have a difference
+directors_null_dist %&gt;% visualize() +
+  shade_p_value(obs_stat = directors_diff, direction = &quot;two-sided&quot;)</code></pre>
+<p><img src="/projects/imdb_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Calculating the p-value for the hypothesis test
+directors_null_dist %&gt;%
+  get_p_value(obs_stat = directors_diff, direction = &quot;two_sided&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.012</code></pre>
+<p><strong>From the hypothesis test, we can see that the t-stat is 3 and the p-value is 1% which is smaller than 5%, so we reject the null hypothesis and conclude that the the difference in mean IMDB ratings for Steven Spielberg and Tim Burton is statistically significant, specifically the mean rating of Steven Spielberg is higher. This is just like what we expected, as we all prefer Steven Spielberg.</strong></p>
+</div>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://www.twitter.com" class="icon alt fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+                
+                    <li><a href="https://www.facebook.com" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://www.github.com" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; London Business School</li>
+                
+                <li>Design:  <a href="https://www.html5up.net">HTML5 UP</a></li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>
