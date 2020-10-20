@@ -1,0 +1,311 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="MFA Student at London Business School">
+	<meta name="author" content="Bartek Mozdzen">
+	<meta name="generator" content="Hugo 0.75.1" />
+	<title>Our world in data &middot; Portfolio Website for Bartek Mozdzen</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Bartek Mozdzen</strong> <span>Portfolio Website</span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs" class="button special fit">My projects</a></li>
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Our world in data</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/blogs/gapminder.jpg" alt="" /></span>
+                            
+                            
+
+
+<div id="gapminder-revisited" class="section level1">
+<h1>Gapminder revisited</h1>
+<pre class="r"><code># load gapminder HIV data
+hiv &lt;- read_csv(here::here(&quot;data&quot;,&quot;adults_with_hiv_percent_age_15_49.csv&quot;))
+life_expectancy &lt;- read_csv(here::here(&quot;data&quot;,&quot;life_expectancy_years.csv&quot;))
+
+# get World bank data using wbstats
+indicators &lt;- c(&quot;SP.DYN.TFRT.IN&quot;,&quot;SE.PRM.NENR&quot;, &quot;SH.DYN.MORT&quot;, &quot;NY.GDP.PCAP.KD&quot;)
+
+
+library(wbstats)
+
+worldbank_data &lt;- wb_data(country=&quot;countries_only&quot;, #countries only- no aggregates like Latin America, Europe, etc.
+                          indicator = indicators, 
+                          start_date = 1960, 
+                          end_date = 2016)
+
+# get a dataframe of information regarding countries, indicators, sources, regions, indicator topics, lending types, income levels,  from the World Bank API 
+countries &lt;-  wbstats::wb_cachelist$countries</code></pre>
+<div id="merging-data-frames" class="section level2">
+<h2>Merging data frames</h2>
+<p><strong>When looking at the HIV, life expectancy, worldbank data and countries data frames, we saw that worldbank data is tidy, therefore we applied pivot_longer to both of the HIV prevalence and life expectancy data frames so that they can be compatible with the worldbank data frame.</strong>
+<strong>Furthermore, looking at the date ranges in all the data frames:</strong>
+- hiv -&gt; 1979 to 2011
+- life_expectancy -&gt; 1800 to 2064
+- worldbank_data -&gt; 1960 to 2016
+<strong>We decided to attach HIV and life expectancy to worldbank_data using the left join function in order to preserve the optimal date range.</strong></p>
+<pre class="r"><code>life_long &lt;- life_expectancy %&gt;% 
+  pivot_longer(
+    cols = 2:302,
+    names_to = &quot;date&quot;,
+    values_to = &quot;life_expectancy&quot;
+    ) %&gt;% 
+  mutate(date = as.numeric(date))
+
+hiv_long &lt;- hiv %&gt;% 
+  pivot_longer(
+    cols = 2:34,
+    names_to = &quot;date&quot;,
+    values_to = &quot;HIV&quot;
+) %&gt;% 
+  mutate(date = as.numeric(date))
+
+countries_tidy &lt;- countries %&gt;% 
+  select(c(3,9))
+
+worldbank_merge &lt;- worldbank_data %&gt;% 
+  left_join(countries_tidy, by = c(&quot;country&quot;))
+            
+            
+worldbank_merge2 &lt;- worldbank_merge %&gt;% 
+  left_join(hiv_long, by = c(&quot;country&quot;, &quot;date&quot;)) %&gt;% 
+  left_join(life_long, by = c(&quot;country&quot;, &quot;date&quot;)) </code></pre>
+</div>
+<div id="looking-at-the-relationship-between-hiv-prevalence-and-life-expectancy" class="section level2">
+<h2>Looking at the relationship between HIV prevalence and life expectancy</h2>
+<p><strong>The graph below illustrates that particularly in the Middle East &amp; North Africa, Latin America &amp; Caribbean, Sub-Saharan Africa there is a clear relationship showing that with higher levels of HIV prevalence, life expectancy declines, this can be expected as, particularly in the past, the disease would virus was life threatening. However, East Asia &amp; Pacific, and Europe &amp; Central Asia show some ambiguous results. Perhaps showing the relationship between HIV prevalence and life expectancy is picking up the indirect effects of other factors such as poor health infrastructure or lower sanitary standards.</strong></p>
+<pre class="r"><code>worldbank_merge2 %&gt;% 
+ggplot(mapping = aes(x=HIV, y=life_expectancy)) +
+         geom_point() +
+          geom_smooth() +
+          facet_wrap(~region,scales = &quot;free&quot;) +
+          theme_bw() +
+          labs(title = &quot;Relationship between HIV prevalence and life expectancy by region&quot;,
+            subtitle = &quot;Unclear conclusions between regions&quot;,
+              x = &quot;HIV Prevalence&quot;,
+               y = &quot;Life Expectancy&quot;
+            )</code></pre>
+<p><img src="/projects/gapminder_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="examining-the-effects-of-gdp-per-capita-on-fertility-rates" class="section level2">
+<h2>Examining the effects of GDP per capita on fertility rates</h2>
+<p><strong>Higher levels of wealth, here measured by GDP per capita, are negatively correlated with fertility rates. This relationship likely comes about as a result of better health care, better education and higher economic participation of women that often coincide with GDP growth. </strong></p>
+<pre class="r"><code>worldbank_merge2 %&gt;% 
+ggplot(mapping = aes(x=NY.GDP.PCAP.KD, y=SP.DYN.TFRT.IN)) +
+         geom_point() +
+          geom_smooth() +
+          facet_wrap(~region, scales = &quot;free&quot;) +
+          labs(
+            x = &quot;GDP per capita&quot;,
+            y = &quot;Fertility Rate&quot;,
+            title = &quot;Higher levels of wealth apply downwards pressure on fertility rates &quot;,
+            subtitle = &quot;GDP per capita vs fertility rate by region&quot;
+          )</code></pre>
+<p><img src="/projects/gapminder_files/figure-html/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="missing-hiv-data" class="section level2">
+<h2>Missing HIV data</h2>
+<p><strong>The region with the most missing observations is Europe &amp; Central Asia with 996 NA values in this data frame, however since there are varying amounts of countries between the regions it is relevant to look at these in terms of a proportion to the total amount of potential observations. When looking at it from that perspective the East Asia &amp; Pacific region misses the highest proportion with 74.1% of potential observations in the dataset registering NA.</strong></p>
+<pre class="r"><code>hiv_missing &lt;- worldbank_merge2 %&gt;%
+  group_by(region) %&gt;% 
+  filter(date &gt;= 1979) %&gt;% #the date range for HIV observations
+  filter(date&lt;= 2011)  %&gt;% 
+  summarize(hivNA = sum(is.na(HIV)), proportion = round(hivNA/n(),digits=3)) %&gt;% 
+  arrange(desc(hivNA))
+
+#Absolute values
+ggplot(hiv_missing,aes(x=reorder(region,hivNA),y=hivNA)) + 
+  geom_col(fill = &quot;lightslateblue&quot;) + 
+  coord_flip() +
+  theme_bw() +
+  labs( x=&quot;&quot;,
+        y=&quot;HIV missing data&quot;,
+        title=&quot;Europe &amp; Central Asia has the most missing HIV observations&quot;,
+        subtitle=&quot;Number of missing HIV prevalence observations per region&quot;
+      )  +
+  geom_text(aes(label=hivNA), vjust=0.5,hjust=1.5,angle=0, color=&quot;white&quot;, size=4)</code></pre>
+<p><img src="/projects/gapminder_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Proportions
+ggplot(hiv_missing,aes(x=reorder(region,proportion),y=proportion)) + 
+  geom_col(fill=&quot;lightslateblue&quot;) + 
+  coord_flip() +
+  theme_bw() +
+  labs( x=&quot;&quot;,
+        y=&quot;HIV missing data&quot;,
+        title=&quot;East Asia &amp; Pacific has the most missing HIV data relative \nto the number of observations&quot;,
+       subtitle=&quot;Proportion of missing HIV prevalence observations per region&quot;)  +
+  geom_text(aes(label=scales::percent(proportion)), vjust=0.5,hjust=1.5,angle=0, color=&quot;white&quot;, size=4) </code></pre>
+<p><img src="/projects/gapminder_files/figure-html/unnamed-chunk-4-2.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-5-countries-with-the-greatestlowest-decrease-in-mortality-rate-per-region" class="section level2">
+<h2>Top 5 countries with the greatest/lowest decrease in mortality rate per region</h2>
+<p><strong>When looking at the countries with the highest and lowest decreases in mortality, South Korea clearly comes out on time with a decrease of -96.97%, while globally Lesotho has had the slowest progress with their mortality rate dropping by only 51.525% over this time period. However, the conclusions you can draw from this analysis are pretty limited since some well developed countries such as Netherlands or the UK have experienced the slowest progress this is due to the fact that they were already well developed back in 1960. Another limitation of this analysis is the missing values of some countries that do not allow a comparison in the time period examined.</strong></p>
+<pre class="r"><code>mortalityanalysis &lt;- worldbank_merge2 %&gt;%
+                filter(date== &quot;1960&quot;| date==&quot;2016&quot;) %&gt;%
+                select(c(&quot;country&quot;,&quot;region&quot;,&quot;date&quot;,&quot;SH.DYN.MORT&quot;)) %&gt;% 
+                pivot_wider(names_from=&quot;date&quot;, values_from=&quot;SH.DYN.MORT&quot;)
+         
+colnames(mortalityanalysis) = c(&quot;country&quot;,&quot;region&quot;,&quot;start&quot;,&quot;end&quot;)
+
+mortalityanalysis_v2 &lt;- mortalityanalysis %&gt;% 
+mutate(delta=(end-start)/start) %&gt;% 
+group_by(region) %&gt;%
+summarize(country,delta) %&gt;%
+arrange(region,desc(delta))
+
+top_five &lt;- mortalityanalysis_v2 %&gt;%
+            slice_min(order_by= delta,n=5) %&gt;%
+            summarize(country, delta)
+
+ggplot(top_five,aes(x=reorder(country,desc(delta)),y=abs(delta))) +
+  geom_col(fill=&quot;lightslateblue&quot;) + 
+  coord_flip()+ 
+  facet_wrap(~region,scales=&quot;free&quot;) + 
+  labs(title=&quot;South Korea&#39;s monumental progress in mortality rate&quot;,
+       subtitle=&quot;5 countries with the greatest decrease in mortality rate per region &quot;,
+       y=&quot;Change in mortality rate between 1960 and 2016&quot;,
+       x=&quot;&quot;) +
+  geom_text(aes(label=scales::percent(delta)), vjust=1,hjust=1, color=&quot;white&quot;, size=3) </code></pre>
+<p><img src="/projects/gapminder_files/figure-html/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>bottom_five &lt;- mortalityanalysis_v2 %&gt;%
+    slice_max(order_by= delta,n=5) %&gt;%
+  summarize(country,delta)
+
+
+ggplot(bottom_five,aes(x=reorder(country,delta),y=abs(delta))) + 
+  geom_col(fill=&quot;lightslateblue&quot;) + 
+  coord_flip()+ 
+  facet_wrap(~region,scales=&quot;free&quot;) + 
+  labs(x=&quot;&quot;,
+        y=&quot;Change in mortality rate between 1960 and 2016&quot;,
+       title=&quot;Lesotho experienced the slowest progress in improving mortality worldwide&quot;,
+       subtitle=&quot;Top 5 countries with the lowest decrease in mortality rate per region&quot;
+       ) +
+  geom_text(aes(label=scales::percent(delta)), vjust=1,hjust=1, color=&quot;white&quot;, size=3) </code></pre>
+<p><img src="/projects/gapminder_files/figure-html/unnamed-chunk-5-2.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="is-there-a-relationship-between-primary-school-enrollment-and-fertility-rate" class="section level2">
+<h2>Is there a relationship between primary school enrollment and fertility rate?</h2>
+<p><strong>There is a clear negative relationship between primary school enrollment and fertility rates. The higher proportion of the country that is able to obtain primary education the lower the fertility rate measures. Some may argue this illustrates a similar relationship as the previous relationship, however the correlation between education and fertility is even stronger, which underlines the role of education outcomes in this relationship. And the role of education has on health outcomes and on economic outcomes and independence of women.</strong></p>
+<pre class="r"><code>worldbank_merge2 %&gt;% 
+ggplot(mapping = aes(x=SE.PRM.NENR, y=SP.DYN.TFRT.IN)) +
+         geom_point() +
+          geom_smooth() +
+          facet_wrap(~region, scales= &quot;free&quot;) +
+          labs(x = &quot;Primary School Enrollment&quot;,
+               y = &quot;Fertility Rate&quot;,
+               title =&quot;Universal access to primary education profoundly decreases fertility rates&quot;,
+               subtitle = &quot;Relationship between primary school enrollment and fertility rate by region&quot;
+               )</code></pre>
+<p><img src="/projects/gapminder_files/figure-html/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://github.com/bartek-mozdzen" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com/in/bartek-mozdzen/" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; London Business School</li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>

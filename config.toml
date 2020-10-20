@@ -95,25 +95,25 @@ disqusShortname = ""
       title = "TfL Bikes"
       subtitle = "Mapping the effect of COVID on the beloved London bikes"
       image = "tfl.jpg"
-      url = "projects/tfl"
+      url = "blogs/tfl"
 
     [[params.tiles.showcase]]
       title = "Climate change"
       subtitle = "An analysis of temperature anomalies"
       image = "climate.jpg"
-      url = "projects/climate"
+      url = "blogs/climate"
 
     [[params.tiles.showcase]]
       title = "Our world in data"
       subtitle = "An analysis of socioeconomic variables around the world"
       image = "gapminder.jpg"
-      url = "projects/gapminder"
+      url = "blogs/gapminder"
 
     [[params.tiles.showcase]]
       title = "Burton vs Spielberg"
       subtitle = "An analysis of the reviews of two directors"
       image = "spielberg.jpg"
-      url = "projects/IMDB"
+      url = "blogs/IMDB"
 
  #  [[params.tiles.showcase]]
   #title = "Consequat"
