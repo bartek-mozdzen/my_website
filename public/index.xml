@@ -22,9 +22,8 @@
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
       
       <guid>/blogs/climate/</guid>
-      <description>Climate change and temperature anomaliesWe wanted to study climate change and used data on the Combined Land-Surface Air and Sea-Surface Water Temperature Anomalies in the Northern Hemisphere at NASA’s Goddard Institute for Space Studies. And we found the tabular data of temperature anomalies here
-We run the code below to load the file:
-weather &amp;lt;- read_csv(&amp;quot;https://data.giss.nasa.gov/gistemp/tabledata_v3/NH.Ts+dSST.csv&amp;quot;, skip = 1, na = &amp;quot;***&amp;quot;)We selected the year and the twelve month variables from the weather dataset and ignored the others (J-D, D-N, DJF, etc.</description>
+      <description>Analysing temperature anomaliesCOVID-19 has put the environmental crisis on the back burne. The analysis of historical temperature anomalies below can serve as a reminder that the fight against climate change is still ahead of us!
+We wanted to study climate change and used data on the Combined Land-Surface Air and Sea-Surface Water Temperature Anomalies in the Northern Hemisphere at NASA’s Goddard Institute for Space Studies. And we found the tabular data of temperature anomalies here</description>
     </item>
     
     <item>

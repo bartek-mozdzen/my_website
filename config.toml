@@ -91,17 +91,18 @@ disqusShortname = ""
     enable = true
     # Display your showcases here.
     
+        [[params.tiles.showcase]]
+      title = "Climate change"
+      subtitle = "An analysis of temperature anomalies"
+      image = "climate.jpg"
+      url = "blogs/climate"
+    
     [[params.tiles.showcase]]
       title = "TfL Bikes"
       subtitle = "Mapping the effect of COVID on the beloved London bikes"
       image = "tfl.jpg"
       url = "blogs/tfl"
 
-    [[params.tiles.showcase]]
-      title = "Climate change"
-      subtitle = "An analysis of temperature anomalies"
-      image = "climate.jpg"
-      url = "blogs/climate"
 
     [[params.tiles.showcase]]
       title = "Our world in data"

@@ -43,10 +43,9 @@ library(infer)
 ```
 
 
-
-
-# Climate change and temperature anomalies 
-
+# Analysing temperature anomalies 
+ 
+COVID-19 has put the environmental crisis on the back burne. The analysis of historical temperature anomalies below can serve as a reminder that the fight against climate change is still ahead of us!
 
 We wanted to study climate change and used data on the *Combined Land-Surface Air and Sea-Surface Water Temperature Anomalies* in the Northern Hemisphere at [NASA's Goddard Institute for Space Studies](https://data.giss.nasa.gov/gistemp). And we found the [tabular data of temperature anomalies here](https://data.giss.nasa.gov/gistemp/tabledata_v3/NH.Ts+dSST.txt)
 
@@ -103,9 +102,8 @@ ggplot(tidyweather, aes(x=date, y = delta))+
 
 ```
 
-### Is the effect of increasing temperature more pronounced in some months? 
 
-**Based on our plots below, the effect of increasing temperature does not depend on month since the smoothing lines across months in different years are quite similar in shape and point values.**
+Based on our plots below, the effect of increasing temperature does not depend on month since the smoothing lines across months in different years are quite similar in shape and point values.
 
 ```{r facet_wrap}
 
@@ -145,7 +143,7 @@ comparison <- tidyweather %>%
 
 Now that we have the `interval` variable, we created a density plot to study the distribution of monthly deviations (`delta`), grouped by the different time periods we are interested in.
 
-**From our plots below, we could see that the most frequent monthly delta values among these time intervals gradually shifted from ~ -0.25 to ~ 0.8, from 1881 - 1920 to 2011 - present, showing the underlying trend of temperature increase across the past centuries.**
+From the plots below, we could see that the most frequent monthly delta values among these time intervals gradually shifted from ~ -0.25 to ~ 0.8, from 1881 - 1920 to 2011 - present, showing the underlying trend of temperature increase across the past centuries.
 
 
 ```{r density_plot}
@@ -164,7 +162,7 @@ ggplot(comparison, aes(x=delta, fill=interval))+
 
 So far, we have been working with monthly anomalies. However, we are interested in average annual anomalies. We did this by using `group_by()` and `summarise()`, followed by a scatter plot to display the result. 
 
-**Unsurprisingly, the average annual anomalies demonstrated the same trend with monthly anomalies across different years since as discussed above, the weather anomalies does not depend on months but on years.**
+Unsurprisingly, the average annual anomalies demonstrated the same trend as the monthly anomalies across different years since, as discussed above, the weather anomalies does not depend on months but on years.
 
 ```{r averaging}
 
@@ -229,4 +227,10 @@ bootstrapped_CI
 
 ```
 
-**From these data we could see that the 95% confidence intervals of the mean temperature anomaly calculated from the formula method and the bootstrap simulation are similar, as (~0.916, 1.02). This indicates that we are 95% confident that the average temperature delta is between ~0.916 and 1.02. In the formula method, we carried out our calculation directly on the temperature anomalies data after 2011. While in the bootstrap simulation, we took 1000 bootstrap samples (large enough samples; samples with replacement and same sample size). Since the bootstrap simulation got similar results as using formulas directly, our estimation of the confidence interval should be quite accurate.**
+From this data we can observe that the 95% confidence intervals of the mean temperature anomaly calculated from the formula method and the bootstrap simulation are similar (~0.916, 1.02). This indicates that we are 95% confident that the average temperature delta is between ~0.916 and 1.02. In the formula method, we carried out our calculation directly on the temperature anomalies data after 2011. While in the bootstrap simulation, we took 1000 bootstrap samples (large enough samples; samples with replacement and same sample size). Since the bootstrap simulation got similar results as using formulas directly, our estimation of the confidence interval should be quite accurate.
+
+**Therefore, in the words of Dylan Thomas:**
+*Do not go gentle into that good night*
+*Rage, rage against the dying of the light*
+
+Consider the choices you make in your daily life, your decisions on the business level and consider donating or volunteering!
