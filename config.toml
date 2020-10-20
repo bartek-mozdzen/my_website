@@ -106,7 +106,7 @@ disqusShortname = ""
 
     [[params.tiles.showcase]]
       title = "Global Socioeconomical Analysis"
-      subtitle = "An analysis of GDP, fertility rate among othersblo"
+      subtitle = "An analysis of GDP, fertility rate among others"
       image = "gapminder.jpg"
       url = "blogs/gapminder"
 
