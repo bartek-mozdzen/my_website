@@ -139,8 +139,8 @@ disqusShortname = ""
   [params.two]
     enable = true
     title = "About me"
-    subtitle = "I am an Economics and Management graduate from King's College London"   
-    buttonText = "Get Started"
+    subtitle = "I am an Economics and Management graduate from King's College London, with experience in financial planning and analysis in the ecommerce industry, currently a Masters in Financial Analysis student at LBS, aspiring to pursue a career in consulting to bring meaningful insights and lasting impact to businesses particularly in the area of sustainability"   
+    buttonText = ""
     url = "blogs"
 
 
