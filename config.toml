@@ -114,7 +114,7 @@ disqusShortname = ""
       title = "Burton vs Spielberg"
       subtitle = "An analysis of the reviews of two directors"
       image = "spielberg.jpg"
-      url = "blogs/IMDB"
+      url = "blogs/imdb"
 
  #  [[params.tiles.showcase]]
   #title = "Consequat"
