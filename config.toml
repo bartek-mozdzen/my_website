@@ -85,13 +85,6 @@ disqusShortname = ""
     subtitle = "Learn a little bit more about me and take a look at some of my recent projects!"
     buttonText = "Get started"
 
-  # Section Type Two
-  [params.two]
-    enable = true
-    title = "About me"
-    subtitle = "I am an Economics and Management graduate from King's College London, with experience in financial planning and analysis in the ecommerce industry, currently a Masters in Financial Analysis student at LBS, aspiring to pursue a career in consulting to bring meaningful insights and lasting impact to businesses particularly in the terms of sustainability!"   
-    buttonText = ""
-    url = "blogs"
 
   # Tiles Section
   [params.tiles]
@@ -142,7 +135,13 @@ disqusShortname = ""
     # For more informtion take a look at the README.
     # To add more blogs just copy and paste the code.
 
-
+  # Section Type Two
+  [params.two]
+    enable = true
+    title = "About me"
+    subtitle = "I am an Economics and Management graduate from King's College London, with experience in financial planning and analysis in the ecommerce industry!. Currently a Masters in Financial Analysis student at LBS, aspiring to pursue a career in consulting to bring meaningful insights and lasting impact to businesses particularly in the terms of sustainability!"   
+    buttonText = ""
+    url = "blogs"
 
 
   # Contact section
