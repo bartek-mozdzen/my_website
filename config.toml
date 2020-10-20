@@ -177,7 +177,7 @@ disqusShortname = ""
 
     [[params.contact.address]]
     title = "Address"
-    street = "Regent's Park"
+    street = "London Business School, \n Regent's Park"
     city = "London, NW1 4SA"
     country = "United Kingdom"
 

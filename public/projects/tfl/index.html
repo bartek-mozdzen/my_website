@@ -77,8 +77,11 @@
                             
 
 
-<div id="challenge-2-excess-rentals-in-tfl-bike-sharing" class="section level1">
-<h1>Challenge 2: Excess rentals in TfL bike sharing</h1>
+<p>Exploring TfL bike sharing</p>
+<div class="figure">
+<img src="C:/Users/Bartek/Desktop/LBS/Data%20Analytics/My-Website/my_website/static/img/blogs" alt="" />
+<p class="caption">Santander bikes</p>
+</div>
 <p>Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following</p>
 <pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
 
@@ -109,8 +112,6 @@ bike &lt;- bike0 %&gt;%
 </ul>
 <div id="reproducing-the-two-graphs-showing-tfl-bike-rentals" class="section level2">
 <h2>Reproducing the two graphs showing TfL bike rentals</h2>
-<pre class="r"><code>knitr::include_graphics(here::here(&quot;images&quot;, &quot;tfl_monthly.png&quot;), error = FALSE)</code></pre>
-<p><img src="C:/Users/Bartek/Desktop/LBS/Data Analytics/My-Website/my_website/images/tfl_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>expected_per_month &lt;- bike %&gt;% 
   filter(year&gt;=2015 &amp; year&lt;=2019) %&gt;% 
   group_by(month) %&gt;%
@@ -187,7 +188,6 @@ bike2 %&gt;%
 <ul>
 <li>In order to calculate the expected rentals we should use the mean. The expected value (here: expected rentals) of a random variable is the average value (mean) of the variable. Due to the law of large numbers, the mean of the variable should converge to its expected value as the number of repetitions approaches infinity.</li>
 </ul>
-</div>
 </div>
 
                         </div>

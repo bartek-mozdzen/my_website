@@ -43,7 +43,9 @@ library(infer)
 ```
 
 
-# Challenge 2: Excess rentals in TfL bike sharing
+Exploring TfL bike sharing
+
+![Santander bikes](C:\Users\Bartek\Desktop\LBS\Data Analytics\My-Website\my_website\static\img\blogs)
 
 Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following
 
@@ -77,9 +79,7 @@ Look at May and Jun and compare 2020 with the previous years. What's happening?
 
 ## Reproducing the two graphs showing TfL bike rentals
 
-```{r tfl_absolute_monthly_change, out.width="100%"}
-knitr::include_graphics(here::here("images", "tfl_monthly.png"), error = FALSE)
-```
+
 ```{r fig.width = 16, fig.height = 9, out.width="100%"}
 
 expected_per_month <- bike %>% 
