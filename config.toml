@@ -38,7 +38,7 @@ disqusShortname = ""
   # Navigation Section
   [params.navigation]
     title = "Bartek Mozdzen"
-    subtitle = "Portfolio Website"
+    subtitle = "MFA2021 @ LBS"
     menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
@@ -81,9 +81,9 @@ disqusShortname = ""
   [params.banner]
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
-    title = "Hi, my name is Bartek!"
-    subtitle = "A Master's in Financial Analysis student @ LBS, aspriring consultant, making the world more sustainable one data file at a time"
-    buttonText = "Project Highlights"
+    title = "Hi, my name is Bartek"
+    subtitle = "Learn a little bit more about me and take a look at some of my recent projects!"
+    buttonText = "Get started"
 
 
   # Tiles Section
@@ -138,12 +138,8 @@ disqusShortname = ""
   # Section Type Two
   [params.two]
     enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
+    title = "About me"
+    subtitle = "I am an Economics and Management graduate from King's College London"   
     buttonText = "Get Started"
     url = "blogs"
 
